@@ -389,6 +389,18 @@ Message Box
 	display: inline-block;
 }
 
+.top-menu-bar button:hover{
+	background: #248A52
+}
+
+.top-menu-bar button:active{
+	background: #2fb26a
+}
+
+.top-menu-bar button.top-menu-bar-selected{
+	background: #2fb26a
+}
+
 .message-box .message-input {
   background: none;
   border: none;

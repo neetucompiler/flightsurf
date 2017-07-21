@@ -1,5 +1,3 @@
-// duplicate variables for $userInputField
-
 var $messages = jQ('.messages-content')
 var $userInputField = jQ('#userInputText')
 var feedBack = {
@@ -499,6 +497,41 @@ function backToChatBtnClick() {
   console.log('enable messages')
 }
 
+jQ('.top-menu-bar button').click(function() {
+  //make all top menu button disabled
+  jQ('.top-menu-bar button').each(function() {
+    if (jQ(this).hasClass('top-menu-bar-selected')) {
+			console.log('disable all button')
+      jQ(this).removeClass('top-menu-bar-selected')
+    }
+  })
+  //only make the selected button as selected
+  jQ(this).addClass('top-menu-bar-selected')
+	console.log('enable current button')
+})
+
+jQ('button.backToChatBtn').click(function(){
+	  //make all top menu button disabled
+  jQ('.top-menu-bar button').each(function() {
+    if (jQ(this).hasClass('top-menu-bar-selected')) {
+			console.log('disable all button')
+      jQ(this).removeClass('top-menu-bar-selected')
+    }
+  })
+})
+
+var options = {
+	url: "resources/countries.json", //load any json
+	getValue: "name",
+	list: {
+		match: {
+			enabled: true
+		},
+		maxNumberOfElements: 8
+	},
+	theme: "dark"
+}
+
 // Sample for sending bot message
 setTimeout(function() {
   botMessage({
@@ -507,3 +540,5 @@ setTimeout(function() {
   })
   enableUserInput('Please ask your query')
 }, 2000)
+
+jQ("#chat-search").easyAutocomplete(options)

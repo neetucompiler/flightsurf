@@ -26,7 +26,7 @@ function setTyping() {
     console.log('No element found with .mCSB_container')
     return false
   }
-  jQ('<div class="message loading new"><figure class="avatar"><img src="/public/icon.png" /></figure><span></span></div>').appendTo(correctElement)
+  jQ('<div class="message loading new"><figure class="avatar"><img src="/public/images/icon.png" /></figure><span></span></div>').appendTo(correctElement)
   jQ('<div class="timestamp">Typing...</div>').appendTo(jQ('.message:last'))
   updateScrollbar()
 }
@@ -81,7 +81,7 @@ function displayBotMessage(botMessage, timeout, choices) {
       setTyping()
     }, timeout / 2)
     setTimeout(function() {
-      jQ('<div class="message new"><figure class="avatar"><img src="/public/icon.png" /></figure>' + botMessage + '</div>').appendTo(correctElement)
+      jQ('<div class="message new"><figure class="avatar"><img src="/public/images/icon.png" /></figure>' + botMessage + '</div>').appendTo(correctElement)
       setTimeStamp()
       jQ('.message.loading').remove()
       jQ('.message.timestamp').remove()
@@ -89,7 +89,7 @@ function displayBotMessage(botMessage, timeout, choices) {
       playSound('bing')
     }, timeout)
   } else {
-    jQ('<div class="message new"><figure class="avatar"><img src="/public/icon.png" /></figure>' + botMessage + '</div>').appendTo(correctElement)
+    jQ('<div class="message new"><figure class="avatar"><img src="/public/images/icon.png" /></figure>' + botMessage + '</div>').appendTo(correctElement)
     setTimeStamp()
     playSound('bing')
   }

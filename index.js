@@ -106,7 +106,7 @@ function loadTemplatesToClient () {
       },
       {
         title: 'Second slide',
-        image: 'icon.png',
+        image: 'images/icon.png',
         buttons: ['Alpha', 'Beta']
       },
       {
