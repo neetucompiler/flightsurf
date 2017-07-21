@@ -1,0 +1,73 @@
+// Place your settings in this file to overwrite default and user settings.
+// Pre-requisite plugins
+// 1. vscode-icons
+// 2. beautify
+// 3. Javascript Standard Style
+// 4. npm i -g eslint-plugin-html
+// 5. npm i -g standard
+{
+  "workbench.activityBar.visible": true,
+  "workbench.iconTheme": "vscode-icons",
+  "vsicons.projectDetection.autoReload": true,
+  "git.confirmSync": false,
+  "terminal.integrated.shell.windows": "C:\\WINDOWS\\Sysnative\\WindowsPowerShell\\v1.0\\powershell.exe",
+  "html.suggest.html5": true,
+
+  // Javascript Standards Options
+  "eslint.enable": false,
+  "javascript.validate.enable": false,
+  "standard.enable": true,
+  "standard.run": "onType",
+  "standard.validate": [
+    "javascript",
+    "javascriptreact",
+    {
+      "language": "html",
+      "autoFix": true
+    }
+  ],
+  "standard.options": {
+    "globals": ["$", "jQ", "Mustache", "jQuery", "fetch"],
+    "ignore": [
+      "node_modules/**"
+    ],
+    "plugins": ["html"]
+  },
+  "standard.autoFixOnSave": true,
+  "files.associations": {
+    "*.vue": "html"
+  },
+
+  // Code Beautify settings
+  "beautify.config": {
+    "indent_size": 2,
+    "indent_char": " ",
+    "css": {
+      "indent_size": 2
+    }
+  },
+  "beautify.language": {
+    "js": {
+      "type": ["javascript", "json"],
+      "filename": [".jshintrc", ".jsbeautifyrc"],
+      "ext": ["js", "json"]
+    },
+    "css": ["css", "scss"],
+    "html": ["htm", "html"]
+  },
+
+  // Editor default settings
+  "editor.insertSpaces": false,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+
+  // Default files to not show up inside vscode
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/*.meta": true
+  }
+}

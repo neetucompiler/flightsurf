@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ChatBot</title>
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/roboto.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css" />
+  <link rel="stylesheet prefetch" href="css/jquery.mCustomScrollbar.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/datepicker.css">
+  <link rel="stylesheet" href="css/responsiveslides.css">
+
+  <style>
+    ​.container {
+      overflow: hidden;
+    }
+
+    #templates {
+      display: none;
+    }
+  </style>
+
+  <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+  <script>
+    var jQ = $.noConflict()
+  </script>
+</head>
+
+<body>
+  <div class="chatBot">
+    <div id="animHelpText" class="animated bounce" style="display: block;">We are glad to assist you !!</div>
+    <div class="chat" id="chatbox">
+      <div class="chat-title">
+        <h1>Bot</h1>
+        <h2>Your bot</h2>
+        <figure class="avatar">
+          <img src="logo.png" alt="logo">
+        </figure>
+        <button class="chat-minmax" id="minim-chat" style="display: none;"><i class="fa fa-minus fa-lg" aria-hidden="true"></i></button>
+        <button class="chat-minmax" id="maxi-chat"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></button>
+      </div>
+      <div class="top-menu-bar">
+        <button class="tooltip" onclick="faqBtnClick()">
+					<i class="fa fa-2x fa-question-circle" aria-hidden="true"></i>
+					<span class="tooltiptext tooltip-bottom">FAQ's</span>
+				</button>
+        <button class="tooltip" onclick="helpdeskBtnClick()">
+					<i class="fa fa-2x fa-info" aria-hidden="true"></i>
+					<span class="tooltiptext tooltip-bottom">HelpDesk Contact</span>
+				</button>
+        <button class="tooltip" onclick="searchBtnClick()">
+					<i class="fa fa-2x fa-search" aria-hidden="true"></i>
+					<span class="tooltiptext tooltip-bottom">Search</span>
+				</button>
+        <button class="tooltip" onclick="announcementBtnClick()">
+					<i class="fa fa-2x fa-bullhorn" aria-hidden="true"></i>
+					<span class="tooltiptext tooltip-bottom">Announcements</span>
+				</button>
+      </div>
+      <div class="messages">
+        <div class="messages-content">
+					
+				</div>
+      </div>
+      <div class="faqs" style="display: none;">
+        <div class="faqs-content">
+          
+          <button class="backToChatBtn" onclick="backToChatBtnClick()">
+						<i class="fa fa-chevron-left" aria-hidden="true"></i>
+						Back to Chat
+					</button>
+        </div>
+      </div>
+      <div class="helpdesk" style="display: none;">
+        <div class="helpdesk-content">
+          
+          <button class="backToChatBtn" onclick="backToChatBtnClick()">
+						<i class="fa fa-chevron-left" aria-hidden="true"></i>
+						Back to Chat
+					</button>
+        </div>
+      </div>
+      <div class="announcements" style="display: none;">
+        <div class="announcements-content">
+          
+          <button class="backToChatBtn" onclick="backToChatBtnClick()">
+						<i class="fa fa-chevron-left" aria-hidden="true"></i>
+						Back to Chat
+					</button>
+        </div>
+      </div>
+      <div class="search" style="display: none;">
+        <div class="search-content">
+          
+          <button class="backToChatBtn" onclick="backToChatBtnClick()">
+						<i class="fa fa-chevron-left" aria-hidden="true"></i>
+						Back to Chat
+					</button>
+        </div>
+      </div>
+      <div class="feedback-bar">
+        <span>
+					Terminate the chat by
+					<button class='end-chat'>End chat</button>
+				</span>
+      </div>
+      <form id="generalForm" class="message-box">
+        <div id="sound"></div>
+        <input id="userInputText" type="text" class="message-input" placeholder="Type message...">
+        <span id="userInputVoice"><button class="voice-btn"><i style="color: white;" class="fa fa-2x fa-microphone" aria-hidden="true"></i></button></span>
+        <button id="userInputSubmit" type="submit" class="message-submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="templates">
+    <div id="feedbackTemplate">
+      <div class="message new">
+        <figure class="avatar"><img src="icon.png" /></figure>
+        Please provide a feedback
+        <br />
+        <img class="chatBtn emoji" isactive="false" rating="1" src="images/poor.png" />
+        <img class="chatBtn emoji" isactive="false" rating="2" src="images/bad.png" />
+        <img class="chatBtn emoji" isactive="false" rating="3" src="images/okay.png" />
+        <img class="chatBtn emoji" isactive="false" rating="4" src="images/good.png" />
+        <img class="chatBtn emoji jqactive" isactive="false" rating="5" src="images/happy.png" />
+        <br />
+        <table>
+          <tr>
+            <td> Enter your comments: </td>
+            <td>
+              <textarea id="comment" name="comments" placeholder="Please enter your comments here"></textarea>
+            </td>
+          </tr>
+        </table>
+        <input class="chatBtn" id="send_feedback" type="submit" value="Send" />
+      </div>
+    </div>
+    <div id="audioTemplate">
+      <div>
+        <div class="message new">
+          <figure class="avatar">
+            <img src="icon2.jpg" />
+          </figure>
+          <audio controls autoplay style="width:225px;">
+					<source {{attr}}="{{attrVal}}" type="audio/mpeg">
+					Your browser does not support the audio tag.
+					</audio>
+          <br/>
+          <i class="fa fa-thumbs-down" isselected="false" aria-hidden="true"></i>
+          <i class="fa fa-thumbs-up" isselected="false" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+    <div id="videoTemplate">
+      <div>
+        <div class="message new">
+          <figure class="avatar">
+            <img src="icon2.jpg" />
+          </figure>
+          <video controls width="100%" height="auto" autoplay>
+					<source {{attr}}="{{attrVal}}" type="video/mp4">
+					Your browser does not support the video tag.
+					</video>
+          <br/>
+          <i class="fa fa-thumbs-down" isselected="false" aria-hidden="true"></i>
+          <i class="fa fa-thumbs-up" isselected="false" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+    <div id="normalMessage">
+      <div>
+        <div class="message new">
+          <figure class="avatar">
+            <img src="icon2.jpg" />
+          </figure>
+          <div class="botmessage">{{message}}
+          </div>
+          <i class="fa fa-thumbs-down" isselected="false" aria-hidden="true"></i>
+          <i class="fa fa-thumbs-up" isselected="false" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+    <div id="choicesMessage">
+      <div>
+        <div class="message new">
+          <figure class="avatar">
+            <img src="icon2.jpg" />
+          </figure>
+          <div class="botmessage">{{message}}
+          </div>
+        </div>
+        {{{choices}}}
+      </div>
+    </div>
+    <div class="message new parentCard">
+      <figure class="avatar">
+        <img src="icon2.jpg" />
+      </figure>
+    </div>
+    <div class="imageCard">
+      <div>
+        <div class="paddingCard">
+          <img {{attr}}="{{attrVal}}" width="80%" />
+        </div>
+      </div>
+    </div>
+    <div class="buttonCard">
+      <div class="cardBtnHolder">
+        {{#button}} <button class="cardBtn"> {{.}} </button>{{/button}}
+      </div>
+    </div>
+    <div class="titleCard">
+      <div>
+        <div class="titleCardText">
+          {{titlemsg}}
+        </div>
+      </div>
+    </div>
+    <div class="audioCard">
+      <div>
+        <audio controls autoplay style="width:225px;">
+				<source {{attr}}="{{attrVal}}" type="audio/mpeg">
+				Your browser does not support the audio tag.
+			</audio>
+      </div>
+    </div>
+    <div class="videoCard">
+      <div>
+        <video controls width="100%" height="auto" autoplay>
+					<source {{attr}}="{{attrVal}}" type="video/mp4">
+					Your browser does not support the video tag.
+			</video>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
+  <script type="text/javascript" src="js/responsiveslides.min.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+</body>
+
+</html>
