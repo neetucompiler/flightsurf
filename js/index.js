@@ -16,6 +16,9 @@ function disableUserInput(placeholderText) {
   $userInputField.attr('placeholder', placeholderText) // Change the placeholder to ask the user to wait
   jQ('.message-box').addClass('disabledCursor')
   jQ('.message-submit').attr('disabled', 'true')
+  jQ('#enabledVoiceBtn').css('display', 'none')
+  jQ('#disabledVoiceBtn').css('display', 'block')
+  jQ('#generalForm').css('cursor', 'not-allowed')
 }
 
 function enableUserInput(placeholderText) {
@@ -25,11 +28,14 @@ function enableUserInput(placeholderText) {
   $userInputField.attr('placeholder', placeholderText) // Change the placeholder to prompt input from the user
   jQ('.message-box').removeClass('disabledCursor')
   jQ('.message-submit').removeAttr('disabled')
+  jQ('#enabledVoiceBtn').css('display', 'block')
+  jQ('#disabledVoiceBtn').css('display', 'none')
+  jQ('#generalForm').removeAttr('style');
 }
 
 // botMessage(data)
 
-jQ(window).load(function() {
+jQ(window).on('load', function() {
   $messages.mCustomScrollbar()
 })
 
@@ -107,9 +113,6 @@ function speak(text) {
  * @returns false if no message is passed
  */
 function botMessage(botMsg) {
-  if (jQ('.message-input').val() !== '') {
-    return false
-  }
   jQ('.message.loading').remove()
   jQ('.message.timestamp').remove()
   var temp = ''
@@ -192,6 +195,20 @@ jQ('body').on('click', '#send_feedback', function(e) {
   }
 })
 
+jQ('body').on('click', '.fa-thumbs-up', function() {
+  jQ(this).addClass('f-active')
+  jQ(this).closest('.message').find('.fa-thumbs-down').removeClass('f-active')
+
+  var text = jQ(this).closest('.message').find('.botmessage').text()
+  var status = 'OK'
+  registerFeedback(feedBack, status, text)
+  console.log(feedBack)
+  jQ(this).closest('.message').find('.shoutout').hide()
+  jQ(this).effect("bounce", {
+    times: 4
+  }, 700)
+})
+
 jQ('body').on('click', '.fa-thumbs-down', function() {
   jQ(this).addClass('f-active')
   jQ(this).closest('.message').find('.fa-thumbs-up').removeClass('f-active')
@@ -206,17 +223,9 @@ jQ('body').on('click', '.fa-thumbs-down', function() {
   console.log(feedBack)
   jQ(this).closest('.message').find('.shoutout').show()
   jQ(this).closest('.message').find('.fa-bullhorn').show()
-})
-
-jQ('body').on('click', '.fa-thumbs-up', function() {
-  jQ(this).addClass('f-active')
-  jQ(this).closest('.message').find('.fa-thumbs-down').removeClass('f-active')
-
-  var text = jQ(this).closest('.message').find('.botmessage').text()
-  var status = 'OK'
-  registerFeedback(feedBack, status, text)
-  console.log(feedBack)
-  jQ(this).closest('.message').find('.shoutout').hide()
+  jQ(this).effect("bounce", {
+    times: 4
+  }, 700)
 })
 
 jQ('body').on('click', '.shoutout_msg .fa-bullhorn', function() {
@@ -385,14 +394,15 @@ jQ('#generalForm').submit(function() {
 
 jQ(document).ready(function() {
   // check that your browser supports the API
-  if (!('webkitSpeechRecognition' in window)) {
+  if ((window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition) === undefined) {
     console.log("Sorry, your Browser does not support the Speech API");
+    jQ('#userInputVoice').css('display', 'none')
   } else {
     // Create the recognition object and define the event handlers
-    var recognition = new webkitSpeechRecognition()
+    var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
     recognition.continuous = true // keep processing input until stopped
     recognition.interimResults = true // show interim results
-    recognition.lang = 'en-GB' // specify the language
+    recognition.lang = 'en-US' // specify the language
     recognition.onstart = function() {
       recognizing = true
       console.log('Speak slowly and clearly')
@@ -426,8 +436,7 @@ jQ(document).ready(function() {
         recognizing = false
       }
     }
-    jQ('#userInputVoice').click(function(e) {
-      e.preventDefault()
+    jQ('#enabledVoiceBtn').click(function(e) {
       if (recognizing) {
         recognition.stop()
         // $('#start_button').html('Click to Start Again');
@@ -501,35 +510,35 @@ jQ('.top-menu-bar button').click(function() {
   //make all top menu button disabled
   jQ('.top-menu-bar button').each(function() {
     if (jQ(this).hasClass('top-menu-bar-selected')) {
-			console.log('disable all button')
+      console.log('disable all button')
       jQ(this).removeClass('top-menu-bar-selected')
     }
   })
   //only make the selected button as selected
   jQ(this).addClass('top-menu-bar-selected')
-	console.log('enable current button')
+  console.log('enable current button')
 })
 
-jQ('button.backToChatBtn').click(function(){
-	  //make all top menu button disabled
+jQ('button.backToChatBtn').click(function() {
+  //make all top menu button disabled
   jQ('.top-menu-bar button').each(function() {
     if (jQ(this).hasClass('top-menu-bar-selected')) {
-			console.log('disable all button')
+      console.log('disable all button')
       jQ(this).removeClass('top-menu-bar-selected')
     }
   })
 })
 
 var options = {
-	url: "resources/countries.json", //load any json
-	getValue: "name",
-	list: {
-		match: {
-			enabled: true
-		},
-		maxNumberOfElements: 8
-	},
-	theme: "dark"
+  url: "resources/countries.json", //load any json
+  getValue: "name",
+  list: {
+    match: {
+      enabled: true
+    },
+    maxNumberOfElements: 8
+  },
+  theme: "dark"
 }
 
 // Sample for sending bot message
