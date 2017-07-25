@@ -1,0 +1,154 @@
+[{
+    "id": 1,
+    "botMessage": "Hello. Thanks for reaching out to us.",
+    "botMessageType": "dialog",
+    "nextResponse": 100
+  },
+  {
+    "id": 100,
+    "botMessage": "What you want to enquire about",
+    "botMessageType": "choice",
+    "choice": [{
+      "option": "1. Order",
+      "nextResponse": 2
+    }, {
+      "option": "2. Issue",
+      "nextResponse": 200
+    }],
+    "userMessageType": "number",
+    "retryPrompt": "Please select correct option"
+  }, {
+    "id": 2,
+    "botMessage": "Please enter the Product name",
+    "botMessageType": "text",
+    "userMessageType": "text",
+    "userInputVar": "productName",
+    "nextResponse": 3
+  }, {
+    "id": 3,
+    "botMessage": "Please enter the Product Variant",
+    "botMessageType": "text",
+    "userMessageType": "text",
+    "userInputVar": "productVariant",
+    "nextResponse": 4
+  }, {
+    "id": 4,
+    "botMessage": "Choose an option",
+    "botMessageType": "choice",
+    "choice": [{
+      "option": "My Order",
+      "nextResponse": 5
+    }, {
+      "option": "My Appointment",
+      "nextResponse": 6
+    },{
+      "option": "My Package",
+      "nextResponse": 7
+    },{
+      "option": "My Order Status",
+      "nextResponse": 8
+    }],
+    "userMessageType": "number",
+    "retryPrompt": "Please select correct option"
+  },
+  {
+    "id": 5,
+    "botMessage": "Please enter the order reference number",
+    "botMessageType": "text",
+    "userMessageType": "number",
+    "userInputVar": "orderRefno",
+    "retryPrompt": "Please enter valid order reference number",
+    "nextResponse": 9
+  },
+  {
+    "id" : 9,
+    "botMessage" : "Order details will be provided here as extracted from the API response",
+    "botMessageType": "text"
+  },
+  {
+    "id": 6,
+    "botMessage": "Please enter the order reference number",
+    "botMessageType": "text",
+    "userMessageType": "text",
+    "userInputVar": "orderRefno",
+    "nextResponse": 10
+  },
+  {
+    "id" : 10,
+    "botMessage" : "Appointment details will be extracted from the API response",
+    "botMessageType": "text"
+  },
+   {
+    "id": 7,
+    "botMessage": "Please enter the order reference number",
+    "botMessageType": "text",
+    "userMessageType": "text",
+    "userInputVar": "orderRefno",
+    "nextResponse": 11
+  },
+  {
+    "id" : 11,
+    "botMessage" : "Package details will be extracted from the API response",
+    "botMessageType": "text"
+  },{
+    "id": 8,
+    "botMessage": "Please enter the order reference number",
+    "botMessageType": "text",
+    "userMessageType": "text",
+    "userInputVar": "orderRefno",
+    "nextResponse": 12
+  },
+  {
+    "id" : 12,
+    "botMessageType": "text",
+    "botMessage" : "Order status will be extracted from the API response"
+  },
+ {
+    "id": 200,
+    "botMessage": "Please enter the Product name",
+    "botMessageType": "text",
+    "userMessageType": "text",
+    "userInputVar": "productName",
+    "nextResponse": 201
+  },
+  {
+    "id": 201,
+    "botMessage": "Please enter the Product Variant",
+    "botMessageType": "text",
+    "userMessageType": "text",
+    "userInputVar": "productVariant",
+    "nextResponse": 202
+  },
+  {
+    "id": 202,
+    "botMessage": "You can select the following",
+    "botMessageType": "choice",
+    "choice": [{
+      "option": "1. My Complaint",
+      "nextResponse": 203
+    }, {
+      "option": "2. My Appointment",
+      "nextResponse": 204
+    }, {
+      "option": "2. My Issue Status",
+      "nextResponse": 205
+    }],
+    "userMessageType": "number",
+    "retryPrompt": "Please select correct option"
+  },
+  {
+    "id" : 203,
+    "botMessageType": "text",
+    "botMessage" : "Complaints will be extracted from the API response"
+  },
+  {
+    "id" : 204,
+    "botMessageType": "text",
+    "botMessage" : "Appointment details will be extracted from the API response"
+  },
+  {
+    "id" : 205,
+    "botMessageType": "text",
+    "botMessage" : "Issue status will be extracted from the API response"
+  }
+]

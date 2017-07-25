@@ -8,7 +8,7 @@ var d
 var finalTranscript = ''
 var recognizing = false
 
-function disableUserInput(placeholderText) {
+function disableUserInput (placeholderText) {
   placeholderText = placeholderText || 'Please Wait...' // Default text
   $userInputField.blur() // Remove the focus from the user input field
   $userInputField.val('') // Remove the text from the user input field
@@ -21,7 +21,7 @@ function disableUserInput(placeholderText) {
   jQ('#generalForm').css('cursor', 'not-allowed')
 }
 
-function enableUserInput(placeholderText) {
+function enableUserInput (placeholderText) {
   placeholderText = placeholderText || 'Please Type!' // Default text
   $userInputField.focus() // Remove the focus from the user input field
   $userInputField.removeAttr('disabled') // Enable the user input field
@@ -30,16 +30,16 @@ function enableUserInput(placeholderText) {
   jQ('.message-submit').removeAttr('disabled')
   jQ('#enabledVoiceBtn').css('display', 'block')
   jQ('#disabledVoiceBtn').css('display', 'none')
-  jQ('#generalForm').removeAttr('style');
+  jQ('#generalForm').removeAttr('style')
 }
 
 // botMessage(data)
 
-jQ(window).on('load', function() {
+jQ(window).on('load', function () {
   $messages.mCustomScrollbar()
 })
 
-jQ('.end-chat').click(function() {
+jQ('.end-chat').click(function () {
   botMessage({
     message: 'Please provide us a feedback',
     type: 'feedback'
@@ -48,14 +48,14 @@ jQ('.end-chat').click(function() {
   disableUserInput('Thank you for using our services')
 })
 
-function updateScrollbar() {
+function updateScrollbar () {
   $messages.mCustomScrollbar('update').mCustomScrollbar('scrollTo', 'bottom', {
     scrollInertia: 10,
     timeout: 0
   })
 }
 
-function formatAMPM(date) {
+function formatAMPM (date) {
   var hours = date.getHours()
   var minutes = date.getMinutes()
   var ampm = hours >= 12 ? 'pm' : 'am'
@@ -66,12 +66,12 @@ function formatAMPM(date) {
   return strTime
 }
 
-function setDate(t) {
+function setDate (t) {
   d = new Date()
   t.find('.message').append(jQ('<div class="timestamp">' + formatAMPM(d) + '</div>'))
 }
 
-function setTyping() {
+function setTyping () {
   jQ('<div class="timestamp">Typing...</div>').appendTo(jQ('.message:last'))
 }
 
@@ -81,7 +81,7 @@ function setTyping() {
  * @param {any} msg User's input text
  * @returns false if user message is null
  */
-function insertMessage(msg) {
+function insertMessage (msg) {
   if (jQ.trim(msg) === '') {
     return false
   }
@@ -98,7 +98,7 @@ function insertMessage(msg) {
  * the queue.
  * @param {any} response message from bot
  */
-function speak(text) {
+function speak (text) {
   var msg = new SpeechSynthesisUtterance()
   msg.text = text
   speechSynthesis.speak(msg)
@@ -112,7 +112,7 @@ function speak(text) {
  * @param {any} data the data/url required for the type of message
  * @returns false if no message is passed
  */
-function botMessage(botMsg) {
+function botMessage (botMsg) {
   jQ('.message.loading').remove()
   jQ('.message.timestamp').remove()
   var temp = ''
@@ -169,12 +169,12 @@ function botMessage(botMsg) {
  * Plays a soundfile
  * @param {any} filename source and name of the file
  */
-function playSound(filename) {
+function playSound (filename) {
   document.getElementById('sound').innerHTML = '<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename + '.mp3" /></audio>'
 }
 
-jQ('body').on('click', '.emoji', function() {
-  jQ('.emoji').each(function() {
+jQ('body').on('click', '.emoji', function () {
+  jQ('.emoji').each(function () {
     jQ(this).attr('isactive', 'false')
     jQ(this).removeClass('jqactive')
   })
@@ -182,7 +182,7 @@ jQ('body').on('click', '.emoji', function() {
   jQ(this).attr('isactive', 'true')
 })
 
-jQ('body').on('click', '#send_feedback', function(e) {
+jQ('body').on('click', '#send_feedback', function (e) {
   if (jQ('textarea').val().length === 0) {
     e.preventDefault()
   } else {
@@ -195,7 +195,7 @@ jQ('body').on('click', '#send_feedback', function(e) {
   }
 })
 
-jQ('body').on('click', '.fa-thumbs-up', function() {
+jQ('body').on('click', '.fa-thumbs-up', function () {
   jQ(this).addClass('f-active')
   jQ(this).closest('.message').find('.fa-thumbs-down').removeClass('f-active')
 
@@ -204,12 +204,13 @@ jQ('body').on('click', '.fa-thumbs-up', function() {
   registerFeedback(feedBack, status, text)
   console.log(feedBack)
   jQ(this).closest('.message').find('.shoutout').hide()
-  jQ(this).effect("bounce", {
+  jQ(this).effect('bounce', {
     times: 4
   }, 700)
+  updateScrollbar()
 })
 
-jQ('body').on('click', '.fa-thumbs-down', function() {
+jQ('body').on('click', '.fa-thumbs-down', function () {
   jQ(this).addClass('f-active')
   jQ(this).closest('.message').find('.fa-thumbs-up').removeClass('f-active')
 
@@ -223,12 +224,13 @@ jQ('body').on('click', '.fa-thumbs-down', function() {
   console.log(feedBack)
   jQ(this).closest('.message').find('.shoutout').show()
   jQ(this).closest('.message').find('.fa-bullhorn').show()
-  jQ(this).effect("bounce", {
+  jQ(this).effect('bounce', {
     times: 4
   }, 700)
+  updateScrollbar()
 })
 
-jQ('body').on('click', '.shoutout_msg .fa-bullhorn', function() {
+jQ('body').on('click', '.shoutout_msg .fa-bullhorn', function () {
   var text = jQ(this).closest('.message').find('.botmessage').text()
   var status = 'not OK'
   var bullhornText = jQ(this).closest('tr').find('.shoutout_msg').val()
@@ -237,8 +239,7 @@ jQ('body').on('click', '.shoutout_msg .fa-bullhorn', function() {
   jQ(this).closest('.shoutout').hide()
 })
 
-
-function displayCard(cards) {
+function displayCard (cards) {
   var $parentCard = jQ('.parentCard').clone()
   // ul encapsulation starts here
   var $parentList = jQ('<ul class="rslides"></ul>')
@@ -275,12 +276,12 @@ function displayCard(cards) {
   return $parentCard
 }
 
-function displayDefault() {
+function displayDefault () {
   var $default = jQ('<h3>Nothing to display</h3>')
   return $default
 }
 
-function displayTitle(title) {
+function displayTitle (title) {
   var titletemp = jQ('.titleCard').clone().html()
   var rendered = Mustache.render(titletemp, {
     titlemsg: title
@@ -288,22 +289,22 @@ function displayTitle(title) {
   return jQ(rendered).html()
 }
 
-function displayImage(image) {
+function displayImage (image) {
   var imgtemp = jQ('.imageCard').clone().html()
   return renderAudioVideoImage(imgtemp, image)
 }
 
-function displayAudio(audio) {
+function displayAudio (audio) {
   var audiotemp = jQ('.audioCard').clone().html()
   return renderAudioVideoImage(audiotemp, audio)
 }
 
-function displayVideo(video) {
+function displayVideo (video) {
   var videotemp = jQ('.videoCard').clone().html()
   return renderAudioVideoImage(videotemp, video)
 }
 
-function displayButtons(buttons) {
+function displayButtons (buttons) {
   var btntemp = jQ('.buttonCard').clone().html()
   Mustache.parse(btntemp)
   var rendered = Mustache.render(btntemp, {
@@ -312,7 +313,7 @@ function displayButtons(buttons) {
   return rendered
 }
 
-function renderAudioVideoImage(doc, url) {
+function renderAudioVideoImage (doc, url) {
   var rendered = Mustache.render(doc, {
     attr: 'src',
     attrVal: url
@@ -320,7 +321,7 @@ function renderAudioVideoImage(doc, url) {
   return jQ(rendered).html()
 }
 
-function registerFeedback(feedback, status, text, shoutout) {
+function registerFeedback (feedback, status, text, shoutout) {
   var check = checkFeedback(feedback, text)
   if (check < 0) {
     addToFeedback(feedBack, status, text)
@@ -329,7 +330,7 @@ function registerFeedback(feedback, status, text, shoutout) {
   }
 }
 
-function checkFeedback(feedback, text) {
+function checkFeedback (feedback, text) {
   var index = -1
   if (feedback.logs.length < 1) {
     return -1
@@ -342,7 +343,7 @@ function checkFeedback(feedback, text) {
   return index
 }
 
-function modifyFeedback(feedback, index, status, message) {
+function modifyFeedback (feedback, index, status, message) {
   feedback.logs[index].status = status
   if (message) {
     feedback.logs[index].feedback = message
@@ -358,7 +359,7 @@ function modifyFeedback(feedback, index, status, message) {
  * @param {any} stat status of the feedback eg:Ok/Not Ok
  * @param {any} mtext bot text for which feedback has been given
  */
-function addToFeedback(feedback, stat, mtext) {
+function addToFeedback (feedback, stat, mtext) {
   feedback.logs.push({
     status: stat,
     text: mtext
@@ -366,17 +367,17 @@ function addToFeedback(feedback, stat, mtext) {
 }
 
 var setTimeoutID
-jQ('#minim-chat').click(function() {
+jQ('#minim-chat').click(function () {
   jQ('#minim-chat').css('display', 'none')
   jQ('#maxi-chat').css('display', 'block')
   // var height = (jQ(".chat").outerHeight(true) - 46) * -1;
   // jQ(".chat").css("margin", "0 0 " + height + "px 0");
   jQ('.chat').css('margin', '0 0 -344px 0')
-  setTimeoutID = setTimeout(function() {
+  setTimeoutID = setTimeout(function () {
     jQ('#animHelpText').css('display', 'block')
   }, 1500)
 })
-jQ('#maxi-chat').click(function() {
+jQ('#maxi-chat').click(function () {
   jQ('#minim-chat').css('display', 'block')
   jQ('#maxi-chat').css('display', 'none')
   jQ('.chat').css('margin', '0')
@@ -384,38 +385,38 @@ jQ('#maxi-chat').click(function() {
   clearTimeout(setTimeoutID)
 })
 
-jQ('#generalForm').submit(function() {
-  var msg = $userInputField.val()
-  disableUserInput('Please Wait...')
-  insertMessage(msg)
-  enableUserInput('Please Type!')
-  return false
-})
+// jQ('#generalForm').submit(function() {
+//   var msg = $userInputField.val()
+//   disableUserInput('Please Wait...')
+//   insertMessage(msg)
+//   enableUserInput('Please Type!')
+//   return false
+// })
 
-jQ(document).ready(function() {
+jQ(document).ready(function () {
   // check that your browser supports the API
   if ((window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition) === undefined) {
-    console.log("Sorry, your Browser does not support the Speech API");
+    console.log('Sorry, your Browser does not support the Speech API')
     jQ('#userInputVoice').css('display', 'none')
   } else {
     // Create the recognition object and define the event handlers
-    var recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+    var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)()
     recognition.continuous = true // keep processing input until stopped
     recognition.interimResults = true // show interim results
     recognition.lang = 'en-US' // specify the language
-    recognition.onstart = function() {
+    recognition.onstart = function () {
       recognizing = true
       console.log('Speak slowly and clearly')
       console.log('Click to Stop')
     }
-    recognition.onerror = function(event) {
+    recognition.onerror = function (event) {
       console.log('There was a recognition error...')
     }
-    recognition.onend = function() {
+    recognition.onend = function () {
       console.log('iam ended')
       recognizing = false
     }
-    recognition.onresult = function(event) {
+    recognition.onresult = function (event) {
       console.log('iam in result')
       var interimTranscript = ''
       // Assemble the transcript from the array of results
@@ -436,7 +437,7 @@ jQ(document).ready(function() {
         recognizing = false
       }
     }
-    jQ('#enabledVoiceBtn').click(function(e) {
+    jQ('#enabledVoiceBtn').click(function (e) {
       if (recognizing) {
         recognition.stop()
         // $('#start_button').html('Click to Start Again');
@@ -456,7 +457,7 @@ jQ(document).ready(function() {
  * @param {any} choices array of choices
  * @returns constructed html of bot choices
  */
-function faqs(choices) {
+function faqs (choices) {
   if (choices !== undefined && choices.length > 1) {
     var choicesBotMessage = '<div class="chatBtnHolder">'
     for (var i = 0; i < choices.length; i++) {
@@ -468,60 +469,60 @@ function faqs(choices) {
   }
 }
 
-function disableMainContent() {
-  var contents = ["messages", "faqs", "helpdesk", "announcements", "search"]
-  contents.forEach(function(element) {
-    jQ("." + element).css('display', 'none')
+function disableMainContent () {
+  var contents = ['messages', 'faqs', 'helpdesk', 'announcements', 'search']
+  contents.forEach(function (element) {
+    jQ('.' + element).css('display', 'none')
     // console.log(element)
   }, this)
 }
 
-function faqBtnClick() {
+function faqBtnClick () {
   disableMainContent()
-  jQ(".faqs").css('display', 'block')
+  jQ('.faqs').css('display', 'block')
   console.log('enable faqs')
 }
 
-function helpdeskBtnClick() {
+function helpdeskBtnClick () {
   disableMainContent()
-  jQ(".helpdesk").css('display', 'block')
+  jQ('.helpdesk').css('display', 'block')
   console.log('enable helpdesk')
 }
 
-function searchBtnClick() {
+function searchBtnClick () {
   disableMainContent()
-  jQ(".search").css('display', 'block')
+  jQ('.search').css('display', 'block')
   console.log('enable search')
 }
 
-function announcementBtnClick() {
+function announcementBtnClick () {
   disableMainContent()
-  jQ(".announcements").css('display', 'block')
+  jQ('.announcements').css('display', 'block')
   console.log('enable announcement')
 }
 
-function backToChatBtnClick() {
+function backToChatBtnClick () {
   disableMainContent()
-  jQ(".messages").css('display', 'block')
+  jQ('.messages').css('display', 'block')
   console.log('enable messages')
 }
 
-jQ('.top-menu-bar button').click(function() {
-  //make all top menu button disabled
-  jQ('.top-menu-bar button').each(function() {
+jQ('.top-menu-bar button').click(function () {
+  // make all top menu button disabled
+  jQ('.top-menu-bar button').each(function () {
     if (jQ(this).hasClass('top-menu-bar-selected')) {
       console.log('disable all button')
       jQ(this).removeClass('top-menu-bar-selected')
     }
   })
-  //only make the selected button as selected
+  // only make the selected button as selected
   jQ(this).addClass('top-menu-bar-selected')
   console.log('enable current button')
 })
 
-jQ('button.backToChatBtn').click(function() {
-  //make all top menu button disabled
-  jQ('.top-menu-bar button').each(function() {
+jQ('button.backToChatBtn').click(function () {
+  // make all top menu button disabled
+  jQ('.top-menu-bar button').each(function () {
     if (jQ(this).hasClass('top-menu-bar-selected')) {
       console.log('disable all button')
       jQ(this).removeClass('top-menu-bar-selected')
@@ -530,19 +531,19 @@ jQ('button.backToChatBtn').click(function() {
 })
 
 var options = {
-  url: "resources/countries.json", //load any json
-  getValue: "name",
+  url: 'resources/countries.json', // load any json
+  getValue: 'name',
   list: {
     match: {
       enabled: true
     },
     maxNumberOfElements: 8
   },
-  theme: "dark"
+  theme: 'dark'
 }
 
 // Sample for sending bot message
-setTimeout(function() {
+setTimeout(function () {
   botMessage({
     message: 'Hi there, I\'m PLMBot and I am here to assist you',
     type: 'normal'
@@ -550,4 +551,4 @@ setTimeout(function() {
   enableUserInput('Please ask your query')
 }, 2000)
 
-jQ("#chat-search").easyAutocomplete(options)
+jQ('#chat-search').easyAutocomplete(options)

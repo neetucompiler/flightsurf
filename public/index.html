@@ -27,6 +27,7 @@
 
   <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
   <script>
     var jQ = $.noConflict()
   </script>
@@ -251,6 +252,33 @@
   <script type="text/javascript" src="js/responsiveslides.min.js"></script>
   <script type="text/javascript" src="js/jquery.easy-autocomplete.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+  <script>
+    // var socket = io('ws://localhost:3000', {
+    //   transports: ['websocket']
+    // })
+    var socket = io.connect()
+    socket.on('connect', function () {
+      console.log('connected!')
+    })
+    jQ('#generalForm').submit(function () {
+      var msg = $userInputField.val()
+      console.log(msg)
+      insertMessage(msg)
+      socket.emit('chat message', msg)
+      updateScrollbar()
+      return false
+    })
+
+    socket.on('chat response', function (msg) {
+      console.log(msg)
+      enableUserInput('Please enter')
+      botMessage({
+        message: msg
+      })
+      updateScrollbar()
+    })
+  </script>
 </body>
 
 </html>
