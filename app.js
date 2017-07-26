@@ -229,6 +229,18 @@ controller.hears(['continue'], 'message_received,direct_message,direct_mention,m
     }
   })
 })
+controller.hears(['intro'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
+  bot.startConversation(message, (err, convo) => {
+    if (err) {
+      throw err
+    }
+    if (confiCheck(message, 0.5)) {
+      convo.say('I am BT assistance here to answer your queries on Issues/Orders/Appointments .You can proceed with your queries ')
+    } else {
+      convo.say(errMsg)
+    }
+  })
+})
 
 // // The below code does not work
 // app.set('port', 3001)
