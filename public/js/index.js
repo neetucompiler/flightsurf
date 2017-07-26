@@ -549,6 +549,6 @@ setTimeout(function () {
     type: 'normal'
   })
   enableUserInput('Please ask your query')
-}, 2000)
+}, 200)
 
 jQ('#chat-search').easyAutocomplete(options)
