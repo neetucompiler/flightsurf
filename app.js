@@ -190,7 +190,7 @@ controller.hears(['appointment'], 'message_received,direct_message,direct_mentio
   })
 })
 
-controller.hears(['order_pacakage'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
+controller.hears(['order_package'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
   bot.startConversation(message, (err, convo) => {
     if (err) {
       throw err
