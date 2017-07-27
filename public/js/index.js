@@ -545,7 +545,7 @@ var options = {
 // Sample for sending bot message
 setTimeout(function () {
   botMessage({
-    message: 'Hi there, I\'m PLMBot and I am here to assist you',
+    message: 'Hi there, I\'m PLMBot and I am here to assist you. What are you looking for? I can help you with Order & Issues about the product',
     type: 'normal'
   })
   enableUserInput('Please ask your query')

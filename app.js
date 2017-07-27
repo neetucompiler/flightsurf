@@ -48,7 +48,7 @@ controller.hears(['greet'], 'message_received,direct_message,direct_mention,ment
   bot.startConversation(message, (err, convo) => {
     if (err) throw err
     if (confiCheck(message, 0.5)) {
-      convo.say('Hello, Welcome! I am PLM bot. How can I help you ? What are you looking for? I can help you with Order & Queries about the product')
+      convo.say('Hello, Welcome! I am PLM bot. How can I help you ?')
     } else {
       convo.say(errMsg)
     }
@@ -235,7 +235,7 @@ controller.hears(['intro'], 'message_received,direct_message,direct_mention,ment
       throw err
     }
     if (confiCheck(message, 0.5)) {
-      convo.say('I am BT assistance here to answer your queries on Issues/Orders/Appointments .You can proceed with your queries ')
+      convo.say('I am PLM assistance here to answer your queries on Issues/Orders/Appointments .You can proceed with your queries ')
     } else {
       convo.say(errMsg)
     }
