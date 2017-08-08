@@ -1,4 +1,7 @@
 const request = require('request-promise')
+const winston = require('winston')
+
+winston.add(winston.transports.File, { filename: 'somefile.log' })
 
 module.exports = config => {
   if (!config) {
@@ -29,6 +32,8 @@ module.exports = config => {
         .then(response => {
           console.log('Rasa response')
           console.log(response)
+          winston.log('info', message.text)
+
           message.intent = response.intent
           message.entities = response.entities
           message.confidence = response.intent.confidence

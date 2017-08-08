@@ -19,6 +19,16 @@ const http = require('http').Server(app)
 // callback(username === 'ChatBotDemo' && password === 'ChatBotDemo!432')
 // })
 // app.use(auth.connect(basic))
+// intents
+// ----------------
+// greet
+// intro
+// issue	entity	prod_type,	prod_var
+// order_package
+// order_appointment
+// order_history
+// order_track	entity	order_id
+// order
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -48,7 +58,7 @@ controller.hears(['greet'], 'message_received,direct_message,direct_mention,ment
   bot.startConversation(message, (err, convo) => {
     if (err) throw err
     if (confiCheck(message, 0.5)) {
-      convo.say('Hello, Welcome! I am PLM bot. How can I help you ?')
+      convo.say('Hello, Welcome! I am PLM bot. I can help you with order and issues')
     } else {
       convo.say(errMsg)
     }
@@ -56,16 +66,37 @@ controller.hears(['greet'], 'message_received,direct_message,direct_mention,ment
 })
 
 controller.hears(['issue'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  bot.startConversation(message, askProductName)
+  if (message.entities.length > 0) {
+    for (var i in message.entities) {
+      if (message.entities[i].entity === 'prod_type') {
+        bot.startConversation(message, askProductVariant)
+      } else if (message.entities[i].entity === 'prod_var') {
+        bot.startConversation(message, askProductName)
+      } else {
+        bot.startConversation(message, askProdNameVar)
+      }
+    }
+  } else {
+    bot.startConversation(message, askProdNameVar)
+  }
 })
 
-var askProductName = (response, convo) => {
+var askProdNameVar = (response, convo) => {
   convo.ask('What is the product name?', (response, convo) => {
-    convo.say('Awesome.')
+    convo.say('Ok. Thanks for your information')
     askProductVariant(response, convo)
     convo.next()
   })
 }
+
+var askProductName = (response, convo) => {
+  convo.ask('What is the product name?', (response, convo) => {
+    convo.say('Ok. Thanks for your information')
+    convo.say('Your issue will be fixed by our concern team.')
+    convo.next()
+  })
+}
+
 var askProductVariant = (response, convo) => {
   convo.ask('What is the product variant?', (response, convo) => {
     convo.say('Ok. Thanks for your information')
@@ -73,10 +104,6 @@ var askProductVariant = (response, convo) => {
     convo.next()
   })
 }
-
-controller.hears(['issue_fault'], 'message_received, direct_message, direct_mention, mention', rasa.hears, (bot, message) => {
-  bot.startConversation(message, askProductName)
-})
 
 controller.hears(['order'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
   bot.startConversation(message, (err, convo) => {
@@ -91,61 +118,52 @@ controller.hears(['order'], 'message_received,direct_message,direct_mention,ment
     // convo.say('If you want to know about your previous orders.Kindly enter what do you want Order Status/Order Details')
   })
 })
-controller.hears(['order_status'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  bot.startConversation(message, (err, convo) => {
-    if (err) {
-      throw err
-    }
-    if (confiCheck(message, 0.5)) {
-      convo.say('Your order status will be displayed here (once retrieved from API call)')
-      convo.say('Ex: Your present Order with OrderId ABCD1234 is in process, expected to be completed on DD-MM-YYYY')
-    } else {
-      convo.say(errMsg)
-    }
-  })
-})
+// controller.hears(['order_status'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
+//   bot.startConversation(message, (err, convo) => {
+//     if (err) { throw err }
+//     if (confiCheck(message, 0.5)) {
+//       convo.say('Your order status will be displayed here (once retrieved from API call)')
+//       convo.say('Ex: Your present Order with OrderId ABCD1234 is in process, expected to be completed on DD-MM-YYYY')
+//     } else {
+//       convo.say(errMsg)
+//     }
+//   })
+// })
 
-controller.hears(['order_details'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  bot.startConversation(message, (err, convo) => {
-    if (err) {
-      throw err
-    }
-    if (confiCheck(message, 0.5)) {
-      convo.say('Your order status will be displayed here (once retrieved from API call)')
-      convo.say('Ex: Your present Order with OrderId ABCD1234 is in process, expected to be completed on DD-MM-YYYY')
-    } else {
-      convo.say(errMsg)
-    }
-  })
-})
-
-controller.hears(['issue_complaint'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  bot.startConversation(message, (err, convo) => {
-    if (err) {
-      throw err
-    }
-    if (confiCheck(message, 0.5)) {
-      convo.say('Issue complaint flow will be designed as per the requirement')
-    } else {
-      convo.say(errMsg)
-    }
-    // convo.say('do you want further details yes/no')
-  })
-})
+// controller.hears(['order_details'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
+//   bot.startConversation(message, (err, convo) => {
+//     if (err) { throw err }
+//     if (confiCheck(message, 0.5)) {
+//       convo.say('Your order status will be displayed here (once retrieved from API call)')
+//       convo.say('Ex: Your present Order with OrderId ABCD1234 is in process, expected to be completed on DD-MM-YYYY')
+//     } else {
+//       convo.say(errMsg)
+//     }
+//   })
+// })
 
 controller.hears(['order_track'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  bot.startConversation(message, (err, convo) => {
-    if (err) {
-      throw err
-    }
-    if (confiCheck(message, 0.5)) {
-      convo.say('Your order tracking details will be displayed here as the design')
-    } else {
-      convo.say(errMsg)
-    }
-    // convo.say('do you want further details yes/no')
-  })
+  if (message.entities.length > 0) {
+    bot.startConversation(message, orderDetails)
+  } else {
+    bot.startConversation(message, getOrderID)
+  }
 })
+
+var orderDetails = (response, convo) => {
+  convo.say('Ok. Thanks for your information')
+  convo.say('Your order details will be available soon')
+  convo.say('NOTE: As details fetched from API call')
+}
+
+var getOrderID = (response, convo) => {
+  convo.ask('Please enter your order ID', (response, convo) => {
+    convo.say('Ok. Thanks for your information')
+    convo.say('Your order details will be available soon')
+    convo.say('NOTE: As details fetched from API call')
+    convo.next()
+  })
+}
 
 controller.hears(['order_history'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
   bot.startConversation(message, (err, convo) => {
@@ -153,7 +171,7 @@ controller.hears(['order_history'], 'message_received,direct_message,direct_ment
       throw err
     }
     if (confiCheck(message, 0.5)) {
-      convo.say('Your order history will be displayed here (once retrieved from API call)')
+      convo.say('Your order history will be displayed here (as retrieved from API call)')
       convo.say('Ex: You have 10 orders. 1 order in processing state')
     } else {
       convo.say(errMsg)
@@ -168,21 +186,8 @@ controller.hears(['order_appointment'], 'message_received,direct_message,direct_
       throw err
     }
     if (confiCheck(message, 0.5)) {
-      convo.say('Your order appointment details will be displayed here (once retrieved from API call)')
-    } else {
-      convo.say(errMsg)
-    }
-    // convo.say('do you want further details yes/no')
-  })
-})
-
-controller.hears(['appointment'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  bot.startConversation(message, (err, convo) => {
-    if (err) {
-      throw err
-    }
-    if (confiCheck(message, 0.5)) {
-      convo.say('Your order appointment details will be displayed (once retrieved from API calls)')
+      convo.say('Your order appointment details are XXXXXXX')
+      convo.say('NOTE: As details fetched from API call')
     } else {
       convo.say(errMsg)
     }
@@ -196,46 +201,21 @@ controller.hears(['order_package'], 'message_received,direct_message,direct_ment
       throw err
     }
     if (confiCheck(message, 0.5)) {
-      convo.say('Your package details are displayed from backend API')
+      convo.say('Your package details are XXXXX')
+      convo.say('NOTE: As details fetched from API call')
     } else {
       convo.say(errMsg)
     }
   })
 })
 
-controller.hears(['discontinue'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  bot.startConversation(message, (err, convo) => {
-    if (err) {
-      throw err
-    }
-    if (confiCheck(message, 0.5)) {
-      convo.say('Okay thanks for your time. Will get back to you')
-      convo.say('Bye! Have a nice day')
-    } else {
-      convo.say(errMsg)
-    }
-  })
-})
-
-controller.hears(['continue'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  bot.startConversation(message, (err, convo) => {
-    if (err) {
-      throw err
-    }
-    if (confiCheck(message, 0.5)) {
-      convo.say('Okay! You can ask me your queries related to Issue/ Order/ Appointments')
-    } else {
-      convo.say(errMsg)
-    }
-  })
-})
 controller.hears(['intro'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
   bot.startConversation(message, (err, convo) => {
     if (err) {
       throw err
     }
     if (confiCheck(message, 0.5)) {
-      convo.say('I am PLM assistance here to answer your queries on Issues/Orders/Appointments .You can proceed with your queries ')
+      convo.say('I am your Bot Assitant. Here to answer your queries on your issue and orders. How can I help you')
     } else {
       convo.say(errMsg)
     }
