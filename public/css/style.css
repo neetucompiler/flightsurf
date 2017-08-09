@@ -46,7 +46,6 @@ body {
 .chatBot *::before,
 .chatBot *::after {
 	box-sizing: border-box;
-	z-index: 100;
 }
 
 div.chatBot {
@@ -112,7 +111,7 @@ Chat Title
   flex: 0 1 56px;
   position: relative;
   z-index: 2;
-  background: rgb(56, 12, 77 );
+  background: rgb(56, 12, 77);
   color: white;
   text-transform: uppercase;
   text-align: left;
@@ -276,7 +275,7 @@ Messages
   right: 5px;
   color: white;
   text-align: right;
-  background: rgb(56, 12, 77 );
+  background: #c5168d;
   border-radius: 10px 10px 0 10px;
 }
 
@@ -285,7 +284,7 @@ Messages
   right: 0;
   border-right: none;
   border-left: 5px solid transparent;
-  border-top: 4px solid rgb(56, 12, 77 );
+  border-top: 4px solid #c5168d;
   bottom: -4px;
 }
 
@@ -389,7 +388,7 @@ Message Box
 }
 
 .feedback-bar {
-  background: black;
+  background: rgb(56, 12, 77);
   position: relative;
   line-height: 20px;
   color: white;
@@ -398,7 +397,7 @@ Message Box
 }
 
 .top-menu-bar {
-  background: black;
+  background: #222;
   position: relative;
   line-height: 20px;
   color: white;
@@ -409,7 +408,7 @@ Message Box
 }
 
 .top-menu-bar button {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(136, 98, 157,0.6);
   border: none;
   border-radius: 3px;
   width: 20%;
@@ -458,7 +457,7 @@ Message Box
   right: 10px;
   color: white;
   border: none;
-  background: #E1A605;
+  background: #c5168d;
   font-size: 10px;
   text-transform: uppercase;
   line-height: 1;
@@ -472,7 +471,7 @@ Message Box
 .end-chat {
   color: white;
   border: none;
-  background: #E1A605;
+  background: #c5168d;
   font-size: 9px;
   text-transform: uppercase;
   height: 20px;
@@ -777,7 +776,7 @@ Bounce Animations
   text-align: center;
   border-radius: 30px;
   padding: 10px;
-  background-color: rgb(5, 60, 109);
+  background-color: #c5168d;
 }
 
 #animHelpText::before {
@@ -1111,7 +1110,7 @@ Bounce Animations
 .tooltip {
   position: relative;
   display: inline-block;
-  z-index: 100;
+  z-index: 10000;
 }
 
 .tooltip>.tooltiptext {
@@ -1362,10 +1361,10 @@ span.chat-search {
   padding: 0;
   border: 0;
   height: 2px;
-  background-image: -webkit-linear-gradient(left, transparent, #8c8b8b, transparent);
-  background-image: -moz-linear-gradient(left, transparent, #8c8b8b, transparent);
-  background-image: -ms-linear-gradient(left, transparent, #8c8b8b, transparent);
-  background-image: -o-linear-gradient(left, transparent, #8c8b8b, transparent);
+  background-image: -webkit-linear-gradient(left, transparent, #222, transparent);
+  background-image: -moz-linear-gradient(left, transparent, #222, transparent);
+  background-image: -ms-linear-gradient(left, transparent, #222, transparent);
+  background-image: -o-linear-gradient(left, transparent, #222, transparent);
 }
 
 .chat-content-holder>.chat-content {
@@ -1375,7 +1374,7 @@ span.chat-search {
   padding: 0;
   left: 2.5%;
   width: 95%;
-  border: 5px solid #a0a0a0;
+  border: 5px solid #222;
   border-radius: 2px;
   height: 175px;
 }
