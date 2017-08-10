@@ -106,9 +106,9 @@ controller.hears(['location_specific_routes_perf'], 'message_received,direct_mes
   if (message.entities.length > 0) {
     for (var j in message.entities) {
       if (message.entities[j].entity === 'location' && (message.entities[j].value === 'Northern' || 'northern')) {
-        bot.reply('Northen routes contributed 47% of Regional revenue earned (31000 / 68000)')
+        bot.reply(message, 'Northen routes contributed 47% of Regional revenue earned (31000 / 68000)')
       } else if (message.entities[j].entity === 'location' && (message.entities[j].value === 'indochina' || 'Indo China' || 'indo china')) {
-        bot.reply('Indo China route earned 12% of Regional revenue earned (8160 / 68000)')
+        bot.reply(message, 'Indo China route earned 12% of Regional revenue earned (8160 / 68000)')
       } else {}
     }
   }
@@ -118,9 +118,9 @@ controller.hears(['market_share'], 'message_received,direct_message,direct_menti
   if (message.entities.length > 0) {
     for (var j in message.entities) {
       if (message.entities[j].entity === 'location' && message.entities[j].value.toLowerCase() === 'sydney') {
-        bot.reply('For Bangkok-Sydney route, TG market share is 50%.  Emirates-28% and Qantas-18% also compete mostly in this region')
+        bot.reply(message, 'For Bangkok-Sydney route, TG market share is 50%.  Emirates-28% and Qantas-18% also compete mostly in this region')
       } else if (message.entities[j].entity === 'location' && message.entities[j].value.toLowerCase() === 'beijing') {
-        bot.reply('For Bangkok- Beijing route, TG market share is 33%.  AirChina-30% and Hainan-18% also compete mostly in this region')
+        bot.reply(message, 'For Bangkok- Beijing route, TG market share is 33%.  AirChina-30% and Hainan-18% also compete mostly in this region')
       } else {}
     }
   }
