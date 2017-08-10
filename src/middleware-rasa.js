@@ -1,8 +1,22 @@
 const request = require('request-promise')
 const winston = require('winston')
+require('winston-azure-blob-transport')
 
-winston.add(winston.transports.File, { filename: 'somefile.log' })
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.AzureBlob)({
+      account: {
+        name: 'bottest',
+        key: 'x3UGY+Yk0pluV32GH6FwWwY3Ys7Jphc2o+0z392HeXBgcEWDv/Bp/OnnITr5BQ54IlJbV6eVjZt+qpwHbzzUng=='
+      },
+      containerName: 'intent-data',
+      blobName: 'somefile',
+      level: 'info'
+    })
+  ]
+})
 
+// winston.add(winston.transports.File, { filename: 'somefile.log' })
 module.exports = config => {
   if (!config) {
     config = {}
@@ -30,9 +44,7 @@ module.exports = config => {
       }
       request(options)
         .then(response => {
-          console.log('Rasa response')
-          console.log(response)
-          winston.log('info', message.text)
+          logger.info(message.text)
 
           message.intent = response.intent
           message.entities = response.entities
