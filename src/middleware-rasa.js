@@ -10,7 +10,7 @@ var logger = new (winston.Logger)({
         key: 'x3UGY+Yk0pluV32GH6FwWwY3Ys7Jphc2o+0z392HeXBgcEWDv/Bp/OnnITr5BQ54IlJbV6eVjZt+qpwHbzzUng=='
       },
       containerName: 'intent-data',
-      blobName: 'somefile',
+      blobName: 'somefile.log',
       level: 'info'
     })
   ]
