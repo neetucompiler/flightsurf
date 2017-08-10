@@ -105,9 +105,9 @@ controller.hears(['intercontinental_routes_perf'], 'message_received,direct_mess
 controller.hears(['location_specific_routes_perf'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
   if (message.entities.length > 0) {
     for (var j in message.entities) {
-      if (message.entities[j].entity === 'location' && (message.entities[j].value === 'Northern' || 'northern')) {
+      if (message.entities[j].entity === 'location' && message.entities[j].value.toLowerCase() === 'northern') {
         bot.reply(message, 'Northen routes contributed 47% of Regional revenue earned (31000 / 68000)')
-      } else if (message.entities[j].entity === 'location' && (message.entities[j].value === 'indochina' || 'Indo China' || 'indo china')) {
+      } else if (message.entities[j].entity === 'location' && (message.entities[j].value.toLowerCase() === 'indochina' || 'indo china')) {
         bot.reply(message, 'Indo China route earned 12% of Regional revenue earned (8160 / 68000)')
       } else {}
     }
