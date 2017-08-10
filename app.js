@@ -76,8 +76,7 @@ controller.hears(['regional_routes_perf'], 'message_received,direct_message,dire
         console.log('inside quarter inside quarter inside quarter inside quarter')
         bot.reply(message, 'Regional routes added revenue 85% of your target. Total revenue Earned this quarter is 21250 Mio THB of Target 25,000 Mio THB. +15 % compared to last year')
       } else {
-        console.log('inside eleeleelelelelelelelel')
-        // bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
+        bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
       }
     }
   } else {
@@ -95,6 +94,7 @@ controller.hears(['intercontinental_routes_perf'], 'message_received,direct_mess
       } else if (message.entities[i].entity === 'time_period' && message.entities[i].value === 'quarter') {
         bot.reply(message, 'Continental routes added revenue 60% of your target. Total revenue Earned this Quarter till date is 12,000 Mio THB of Target 20,000 Mio THB. +4% compared to last year')
       } else {
+        bot.reply(message, 'Continental routes added revenue 35% of your target. Total revenue Earned this year till date is 24,500 Mio THB of Target 70,000 Mio THB. -15% compared to last year')
       }
     }
   } else {
