@@ -67,13 +67,13 @@ controller.hears(['greet'], 'message_received', rasa.hears, (bot, message) => {
 
 controller.hears(['regional_routes_perf'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
   console.log('message.entities.length' + message.entities.length)
-  if (message.entities.length > 1) {
+  if (message.entities.length >= 1) {
     for (var i in message.entities) {
-      if (message.entities[i].entity === 'time_period' && message.entities[i].value === 'month') {
+      if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'month') {
         bot.reply(message, 'Regional routes added revenue 60% of your target. Total revenue Earned this Month  is 3600 Mio THB of Target 6000 Mio THB. -8% compared to last year')
-      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value === 'year') {
+      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'year') {
         bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
-      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value === 'quarter') {
+      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'quarter') {
         console.log('inside quarter inside quarter inside quarter inside quarter')
         bot.reply(message, 'Regional routes added revenue 85% of your target. Total revenue Earned this quarter is 21250 Mio THB of Target 25,000 Mio THB. +15 % compared to last year')
       } else {
@@ -86,13 +86,13 @@ controller.hears(['regional_routes_perf'], 'message_received,direct_message,dire
 })
 
 controller.hears(['intercontinental_routes_perf'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  if (message.entities.length > 1) {
+  if (message.entities.length >= 1) {
     for (var i in message.entities) {
-      if (message.entities[i].entity === 'time_period' && message.entities[i].value === 'month') {
+      if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'month') {
         bot.reply(message, 'Continental routes added revenue 78% of your target. Total revenue Earned this Month  till date is 4,680 Mio THB of Target 6,000 Mio THB. +4% compared to last year')
-      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value === 'year') {
+      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'year') {
         bot.reply(message, 'Continental routes added revenue 35% of your target. Total revenue Earned this year till date is 24,500 Mio THB of Target 70,000 Mio THB. -15% compared to last year')
-      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value === 'quarter') {
+      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'quarter') {
         bot.reply(message, 'Continental routes added revenue 60% of your target. Total revenue Earned this Quarter till date is 12,000 Mio THB of Target 20,000 Mio THB. +4% compared to last year')
       } else {
         // bot.reply(message, 'Continental routes added revenue 35% of your target. Total revenue Earned this year till date is 24,500 Mio THB of Target 70,000 Mio THB. -15% compared to last year')
