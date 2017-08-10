@@ -45,7 +45,7 @@ module.exports = config => {
       request(options)
         .then(response => {
           logger.info(message.text)
-
+          winston.info(message.text)
           message.intent = response.intent
           message.entities = response.entities
           message.confidence = response.intent.confidence
