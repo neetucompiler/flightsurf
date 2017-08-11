@@ -66,27 +66,32 @@ controller.hears(['greet'], 'message_received', rasa.hears, (bot, message) => {
 })
 
 controller.hears(['regional_routes_perf'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  console.log('message.entities.length' + message.entities.length)
-  if (message.entities.length > 0) {
-    var entity = []
-    for (var i in message.entities) {
-      if (message.entities[i].entity === 'time_period') {
-        entity.push(message.entities[i].value.toLowerCase())
+  if (confiCheck(message, 0.5)) {
+    if (message.entities.length > 0) {
+      var entity = []
+      for (var i in message.entities) {
+        if (message.entities[i].entity === 'time_period') {
+          entity.push(message.entities[i].value.toLowerCase())
+        }
       }
-    }
-    if (entity.length === 0) {
-      bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
-    } else {
-      if (entity.indexOf('year') > -1) {
+      if (entity.length === 0) {
         bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
-      } else if (entity.indexOf('month') > -1) {
-        bot.reply(message, 'Regional routes added revenue 60% of your target. Total revenue Earned this Month  is 3600 Mio THB of Target 6000 Mio THB. -8% compared to last year')
-      } else if (entity.indexOf('quarter') > -1) {
-        bot.reply(message, 'Regional routes added revenue 85% of your target. Total revenue Earned this quarter is 21250 Mio THB of Target 25,000 Mio THB. +15 % compared to last year')
-      } else {}
+      } else {
+        if (entity.indexOf('year') > -1) {
+          bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
+        } else if (entity.indexOf('month') > -1) {
+          bot.reply(message, 'Regional routes added revenue 60% of your target. Total revenue Earned this Month  is 3600 Mio THB of Target 6000 Mio THB. -8% compared to last year')
+        } else if (entity.indexOf('quarter') > -1) {
+          bot.reply(message, 'Regional routes added revenue 85% of your target. Total revenue Earned this quarter is 21250 Mio THB of Target 25,000 Mio THB. +15 % compared to last year')
+        } else {
+          bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
+        }
+      }
+    } else {
+      bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
     }
   } else {
-    bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
+    bot.reply(errMsg)
   }
 })
 
