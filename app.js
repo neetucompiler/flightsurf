@@ -67,18 +67,23 @@ controller.hears(['greet'], 'message_received', rasa.hears, (bot, message) => {
 
 controller.hears(['regional_routes_perf'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
   console.log('message.entities.length' + message.entities.length)
-  if (message.entities.length >= 1) {
+  if (message.entities.length > 0) {
+    var entity = []
     for (var i in message.entities) {
-      if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'month') {
-        bot.reply(message, 'Regional routes added revenue 60% of your target. Total revenue Earned this Month  is 3600 Mio THB of Target 6000 Mio THB. -8% compared to last year')
-      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'year') {
-        bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
-      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'quarter') {
-        console.log('inside quarter inside quarter inside quarter inside quarter')
-        bot.reply(message, 'Regional routes added revenue 85% of your target. Total revenue Earned this quarter is 21250 Mio THB of Target 25,000 Mio THB. +15 % compared to last year')
-      } else {
-        // bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
+      if (message.entities[i].entity === 'time_period') {
+        entity.push(message.entities[i].value.toLowerCase())
       }
+    }
+    if (entity.length === 0) {
+      bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
+    } else {
+      if (entity.indexOf('year') > -1) {
+        bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
+      } else if (entity.indexOf('month') > -1) {
+        bot.reply(message, 'Regional routes added revenue 60% of your target. Total revenue Earned this Month  is 3600 Mio THB of Target 6000 Mio THB. -8% compared to last year')
+      } else if (entity.indexOf('quarter') > -1) {
+        bot.reply(message, 'Regional routes added revenue 85% of your target. Total revenue Earned this quarter is 21250 Mio THB of Target 25,000 Mio THB. +15 % compared to last year')
+      } else {}
     }
   } else {
     bot.reply(message, 'Regional routes added revenue 40% of your target. Total revenue Earned this year till date is 68000 Mio THB of Target 170,000 Mio THB. +12% compared to last year')
@@ -86,17 +91,23 @@ controller.hears(['regional_routes_perf'], 'message_received,direct_message,dire
 })
 
 controller.hears(['intercontinental_routes_perf'], 'message_received,direct_message,direct_mention,mention', rasa.hears, (bot, message) => {
-  if (message.entities.length >= 1) {
+  if (message.entities.length > 0) {
+    var intercontinental_entity = []
     for (var i in message.entities) {
-      if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'month') {
-        bot.reply(message, 'Continental routes added revenue 78% of your target. Total revenue Earned this Month  till date is 4,680 Mio THB of Target 6,000 Mio THB. +4% compared to last year')
-      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'year') {
-        bot.reply(message, 'Continental routes added revenue 35% of your target. Total revenue Earned this year till date is 24,500 Mio THB of Target 70,000 Mio THB. -15% compared to last year')
-      } else if (message.entities[i].entity === 'time_period' && message.entities[i].value.toLowerCase() === 'quarter') {
-        bot.reply(message, 'Continental routes added revenue 60% of your target. Total revenue Earned this Quarter till date is 12,000 Mio THB of Target 20,000 Mio THB. +4% compared to last year')
-      } else {
-        // bot.reply(message, 'Continental routes added revenue 35% of your target. Total revenue Earned this year till date is 24,500 Mio THB of Target 70,000 Mio THB. -15% compared to last year')
+      if (message.entities[i].entity === 'time_period') {
+        intercontinental_entity.push(message.entities[i].value.toLowerCase())
       }
+    }
+    if (intercontinental_entity.length === 0) {
+      bot.reply(message, 'Continental routes added revenue 35% of your target. Total revenue Earned this year till date is 24,500 Mio THB of Target 70,000 Mio THB. -15% compared to last year')
+    } else {
+      if (intercontinental_entity.indexOf('year') > -1) {
+        bot.reply(message, 'Continental routes added revenue 35% of your target. Total revenue Earned this year till date is 24,500 Mio THB of Target 70,000 Mio THB. -15% compared to last year')
+      } else if (intercontinental_entity.indexOf('month') > -1) {
+        bot.reply(message, 'Continental routes added revenue 78% of your target. Total revenue Earned this Month  till date is 4,680 Mio THB of Target 6,000 Mio THB. +4% compared to last year')
+      } else if (intercontinental_entity.indexOf('quarter') > -1) {
+        bot.reply(message, 'Continental routes added revenue 60% of your target. Total revenue Earned this Quarter till date is 12,000 Mio THB of Target 20,000 Mio THB. +4% compared to last year')
+      } else {}
     }
   } else {
     bot.reply(message, 'Continental routes added revenue 35% of your target. Total revenue Earned this year till date is 24,500 Mio THB of Target 70,000 Mio THB. -15% compared to last year')
@@ -139,12 +150,6 @@ controller.hears(['intro'], 'message_received', rasa.hears, (bot, message) => {
     }
   })
 })
-
-// // The below code does not work
-// app.set('port', 3001)
-// app.listen(app.get('port'), () {
-// console.log(`Example app listening on port ${app.get('port')}`)
-// })
 
 app.set('port', process.env.port || process.env.PORT || 62000)
 http.listen(app.get('port'), () => {
