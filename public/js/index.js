@@ -1,5 +1,6 @@
-var $messages = jQ('.messages-content')
-var $userInputField = jQ('#userInputText')
+var BOT_CONNECTOR = 'q8O4PEwt7UU.cwA.mYQ.NjkC8GL_SvMWmH5pGpmFUgct5ZNx1HObGESJTtv54P8'
+var $messages = $('.messages-content')
+var $userInputField = $('#userInputText')
 var feedBack = {
   logs: []
 }
@@ -7,6 +8,86 @@ var feedBack = {
 var d
 var finalTranscript = ''
 var recognizing = false
+var userInputVal
+var convoId
+
+/**
+ * For accessing LUIS API conversation
+ */
+function GetConversationId () {
+  console.log('GetConversationId')
+  $.ajax({
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + BOT_CONNECTOR
+    },
+    url: 'https://directline.botframework.com/api/conversations'
+  }).then(function (response) {
+    console.log(response)
+    console.log('success')
+    console.log(response)
+    console.log(response.data)
+    convoId = response['conversationId']
+    $('<div class="message loading new"><figure class="avatar"><img src="icon.png" /></figure><span></span></div>').appendTo($('.mCSB_container'))
+    setTyping()
+    updateScrollbar()
+    setTimeout(function () {
+      PostMessage()
+    }, 1000)
+  })
+}
+
+/**
+ * For accessing LUIS API conversation
+ */
+function PostMessage () {
+  console.log('https://directline.botframework.com/api/conversations/' + convoId + '/messages')
+  console.log(userInputVal)
+
+  var dataToBePassed = {
+    'text': userInputVal,
+    'from': 'user1'
+  }
+
+  $.ajax({
+    url: 'https://directline.botframework.com/api/conversations/' + convoId + '/messages',
+    dataType: 'json',
+    type: 'post',
+    contentType: 'application/json',
+    headers: {
+      'Authorization': 'Bearer ' + BOT_CONNECTOR
+    },
+    data: JSON.stringify(dataToBePassed),
+    success: function (data, status) {
+      setTimeout(function () {
+        GetMessage()
+      }, 2000)
+    }
+  })
+}
+
+/**
+ * For accessing LUIS API conversation
+ */
+function GetMessage () {
+  $.ajax({
+    url: 'https://directline.botframework.com/api/conversations/' + convoId + '/messages',
+    type: 'get',
+    contentType: 'application/json',
+    headers: {
+      'Authorization': 'Bearer ' + BOT_CONNECTOR
+    },
+    success: function (response) {
+      console.log(response['messages'][response['watermark']]['text'])
+      var botJsonMsg = {
+        'message': response['messages'][response['watermark']]['text'],
+        'type': 'normal'
+      }
+      botMessage(botJsonMsg)
+    }
+  })
+}
 
 function disableUserInput (placeholderText) {
   placeholderText = placeholderText || 'Please Wait...' // Default text
@@ -14,11 +95,11 @@ function disableUserInput (placeholderText) {
   $userInputField.val('') // Remove the text from the user input field
   $userInputField.attr('disabled', 'true') // Disable the user input field
   $userInputField.attr('placeholder', placeholderText) // Change the placeholder to ask the user to wait
-  jQ('.message-box').addClass('disabledCursor')
-  jQ('.message-submit').attr('disabled', 'true')
-  jQ('#enabledVoiceBtn').css('display', 'none')
-  jQ('#disabledVoiceBtn').css('display', 'block')
-  jQ('#generalForm').css('cursor', 'not-allowed')
+  $('.message-box').addClass('disabledCursor')
+  $('.message-submit').attr('disabled', 'true')
+  $('#enabledVoiceBtn').css('display', 'none')
+  $('#disabledVoiceBtn').css('display', 'block')
+  $('#generalForm').css('cursor', 'not-allowed')
 }
 
 function enableUserInput (placeholderText) {
@@ -26,25 +107,25 @@ function enableUserInput (placeholderText) {
   $userInputField.focus() // Remove the focus from the user input field
   $userInputField.removeAttr('disabled') // Enable the user input field
   $userInputField.attr('placeholder', placeholderText) // Change the placeholder to prompt input from the user
-  jQ('.message-box').removeClass('disabledCursor')
-  jQ('.message-submit').removeAttr('disabled')
-  jQ('#enabledVoiceBtn').css('display', 'block')
-  jQ('#disabledVoiceBtn').css('display', 'none')
-  jQ('#generalForm').removeAttr('style')
+  $('.message-box').removeClass('disabledCursor')
+  $('.message-submit').removeAttr('disabled')
+  $('#enabledVoiceBtn').css('display', 'block')
+  $('#disabledVoiceBtn').css('display', 'none')
+  $('#generalForm').removeAttr('style')
 }
 
 // botMessage(data)
 
-jQ(window).on('load', function () {
+$(window).on('load', function () {
   $messages.mCustomScrollbar()
 })
 
-jQ('.end-chat').click(function () {
+$('.end-chat').click(function () {
   botMessage({
     message: 'Please provide us a feedback',
     type: 'feedback'
   })
-  jQ('.feedback-bar').hide()
+  $('.feedback-bar').hide()
   disableUserInput('Thank you for using our services')
 })
 
@@ -68,11 +149,11 @@ function formatAMPM (date) {
 
 function setDate (t) {
   d = new Date()
-  t.find('.message').append(jQ('<div class="timestamp">' + formatAMPM(d) + '</div>'))
+  t.find('.message').append($('<div class="timestamp">' + formatAMPM(d) + '</div>'))
 }
 
 function setTyping () {
-  jQ('<div class="timestamp">Typing...</div>').appendTo(jQ('.message:last'))
+  $('<div class="timestamp">Typing...</div>').appendTo($('.message:last'))
 }
 
 /**
@@ -82,13 +163,13 @@ function setTyping () {
  * @returns false if user message is null
  */
 function insertMessage (msg) {
-  if (jQ.trim(msg) === '') {
+  if ($.trim(msg) === '') {
     return false
   }
-  var temp = jQ('<div class="message message-personal">' + msg + '</div>')
-  temp.appendTo(jQ('.mCSB_container')).addClass('new')
+  var temp = $('<div class="message message-personal">' + msg + '</div>')
+  temp.appendTo($('.mCSB_container')).addClass('new')
   setDate(temp)
-  jQ('.message-input').val(null)
+  $('.message-input').val(null)
   updateScrollbar()
 }
 
@@ -113,47 +194,47 @@ function speak (text) {
  * @returns false if no message is passed
  */
 function botMessage (botMsg) {
-  jQ('.message.loading').remove()
-  jQ('.message.timestamp').remove()
+  $('.message.loading').remove()
+  $('.message.timestamp').remove()
   var temp = ''
   var rendered
   if (botMsg.type === 'feedback') {
-    temp = jQ('#feedbackTemplate').clone()
+    temp = $('#feedbackTemplate').clone()
   } else if (botMsg.type === 'video') {
-    temp = jQ('#videoTemplate').clone().html()
+    temp = $('#videoTemplate').clone().html()
     rendered = Mustache.render(temp, {
       attr: 'src',
       attrVal: botMsg.data
     })
-    temp = jQ(rendered)
+    temp = $(rendered)
   } else if (botMsg.type === 'audio') {
-    temp = jQ('#audioTemplate').clone().html()
+    temp = $('#audioTemplate').clone().html()
     rendered = Mustache.render(temp, {
       attr: 'src',
       attrVal: botMsg.data
     })
-    temp = jQ(rendered)
+    temp = $(rendered)
   } else if (botMsg.type === 'herocard') {
-    temp = jQ(displayCard(botMsg.data).wrap('<p/>').parent())
+    temp = $(displayCard(botMsg.data).wrap('<p/>').parent())
   } else if (botMsg.type === 'choices') {
-    var chtemp = jQ('#choicesMessage').clone().html()
+    var chtemp = $('#choicesMessage').clone().html()
     rendered = Mustache.render(chtemp, {
       message: botMsg.message,
       choices: faqs(botMsg.data)
     })
-    temp = jQ(rendered)
+    temp = $(rendered)
   } else if (botMsg.type === 'normal' || !(botMsg.type)) {
-    temp = jQ('#normalMessage').clone().html()
+    temp = $('#normalMessage').clone().html()
     rendered = Mustache.render(temp, {
       message: botMsg.message
     })
-    temp = jQ(rendered)
+    temp = $(rendered)
   }
-  // console.log('type: \t' + type + 'temp: \t' + jQ(temp).html())
+  // console.log('type: \t' + type + 'temp: \t' + $(temp).html())
   setDate(temp)
-  jQ('.mCSB_container').append(temp.html())
+  $('.mCSB_container').append(temp.html())
   if (botMsg.type === 'herocard') {
-    jQ('.mCSB_container').find('.rslides').responsiveSlides({
+    $('.mCSB_container').find('.rslides').responsiveSlides({
       auto: false,
       nav: true,
       prevText: '<i class="fa fa-arrow-left fa-2x" aria-hidden="true"></i>',
@@ -173,79 +254,79 @@ function playSound (filename) {
   document.getElementById('sound').innerHTML = '<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename + '.mp3" /></audio>'
 }
 
-jQ('body').on('click', '.emoji', function () {
-  jQ('.emoji').each(function () {
-    jQ(this).attr('isactive', 'false')
-    jQ(this).removeClass('jqactive')
+$('body').on('click', '.emoji', function () {
+  $('.emoji').each(function () {
+    $(this).attr('isactive', 'false')
+    $(this).removeClass('jqactive')
   })
-  jQ(this).addClass('jqactive')
-  jQ(this).attr('isactive', 'true')
+  $(this).addClass('jqactive')
+  $(this).attr('isactive', 'true')
 })
 
-jQ('body').on('click', '#send_feedback', function (e) {
-  if (jQ('textarea').val().length === 0) {
+$('body').on('click', '#send_feedback', function (e) {
+  if ($('textarea').val().length === 0) {
     e.preventDefault()
   } else {
-    insertMessage('Thank you for your  rating of ' + jQ('.emoji.jqactive').attr('rating') + " and your comment '" + jQ('textarea').val() + "' ")
+    insertMessage('Thank you for your  rating of ' + $('.emoji.jqactive').attr('rating') + " and your comment '" + $('textarea').val() + "' ")
     feedBack.logs.push({
-      finalRating: jQ('.emoji.jqactive').attr('rating'),
-      finalFeedback: jQ(this).closest('.message').find('textarea').val()
+      finalRating: $('.emoji.jqactive').attr('rating'),
+      finalFeedback: $(this).closest('.message').find('textarea').val()
     })
-    jQ(this).prop('disabled', true)
+    $(this).prop('disabled', true)
   }
 })
 
-jQ('body').on('click', '.fa-thumbs-up', function () {
-  jQ(this).addClass('f-active')
-  jQ(this).closest('.message').find('.fa-thumbs-down').removeClass('f-active')
+$('body').on('click', '.fa-thumbs-up', function () {
+  $(this).addClass('f-active')
+  $(this).closest('.message').find('.fa-thumbs-down').removeClass('f-active')
 
-  var text = jQ(this).closest('.message').find('.botmessage').text()
+  var text = $(this).closest('.message').find('.botmessage').text()
   var status = 'OK'
   registerFeedback(feedBack, status, text)
   console.log(feedBack)
-  jQ(this).closest('.message').find('.shoutout').hide()
-  jQ(this).effect('bounce', {
+  $(this).closest('.message').find('.shoutout').hide()
+  $(this).effect('bounce', {
     times: 4
   }, 700)
   updateScrollbar()
 })
 
-jQ('body').on('click', '.fa-thumbs-down', function () {
-  jQ(this).addClass('f-active')
-  jQ(this).closest('.message').find('.fa-thumbs-up').removeClass('f-active')
+$('body').on('click', '.fa-thumbs-down', function () {
+  $(this).addClass('f-active')
+  $(this).closest('.message').find('.fa-thumbs-up').removeClass('f-active')
 
-  if (jQ(this).closest('.message').find('.shoutout').length === 0) {
-    var temp = jQ('<div class="shoutout"><br><br><hr><table><tr><td>Let us know why:</td><td><textarea class="shoutout_msg" name="dislike" placeholder="Enter here"></textarea></td><td><i class="fa fa-bullhorn fa-2x" aria-hidden="true"></i></td></tr></table></div>')
-    temp.appendTo(jQ(this).closest('.message'))
+  if ($(this).closest('.message').find('.shoutout').length === 0) {
+    var temp = $('<div class="shoutout"><br><br><hr><table><tr><td>Let us know why:</td><td><textarea class="shoutout_msg" name="dislike" placeholder="Enter here"></textarea></td><td><i class="fa fa-bullhorn fa-2x" aria-hidden="true"></i></td></tr></table></div>')
+    temp.appendTo($(this).closest('.message'))
   }
-  var text = jQ(this).closest('.message').find('.botmessage').text()
+  var text = $(this).closest('.message').find('.botmessage').text()
   var status = 'not OK'
   registerFeedback(feedBack, status, text)
   console.log(feedBack)
-  jQ(this).closest('.message').find('.shoutout').show()
-  jQ(this).closest('.message').find('.fa-bullhorn').show()
-  jQ(this).effect('bounce', {
+  $(this).closest('.message').find('.shoutout').show()
+  $(this).closest('.message').find('.fa-bullhorn').show()
+  $(this).effect('bounce', {
     times: 4
   }, 700)
   updateScrollbar()
 })
 
-jQ('body').on('click', '.shoutout_msg .fa-bullhorn', function () {
-  var text = jQ(this).closest('.message').find('.botmessage').text()
+$('body').on('click', '.shoutout_msg .fa-bullhorn', function () {
+  var text = $(this).closest('.message').find('.botmessage').text()
   var status = 'not OK'
-  var bullhornText = jQ(this).closest('tr').find('.shoutout_msg').val()
+  var bullhornText = $(this).closest('tr').find('.shoutout_msg').val()
   registerFeedback(feedBack, status, text, bullhornText)
   console.log(feedBack)
-  jQ(this).closest('.shoutout').hide()
+  $(this).closest('.shoutout').hide()
 })
 
 function displayCard (cards) {
-  var $parentCard = jQ('.parentCard').clone()
+  var $parentCard = $('.parentCard').clone()
   // ul encapsulation starts here
-  var $parentList = jQ('<ul class="rslides"></ul>')
+  var $parentList = $('<ul class="rslides"></ul>')
   for (var i = 0; i < cards.carousel.container.length; i++) {
     // li encapsulation for each iteration
-    var $listTemp = jQ('<li></li>')
+    var $listTemp = $('<li></li>')
     for (var key in cards.carousel.container[i]) {
       // entire loop must be encapsulated in one li
       switch (key) {
@@ -277,35 +358,35 @@ function displayCard (cards) {
 }
 
 function displayDefault () {
-  var $default = jQ('<h3>Nothing to display</h3>')
+  var $default = $('<h3>Nothing to display</h3>')
   return $default
 }
 
 function displayTitle (title) {
-  var titletemp = jQ('.titleCard').clone().html()
+  var titletemp = $('.titleCard').clone().html()
   var rendered = Mustache.render(titletemp, {
     titlemsg: title
   })
-  return jQ(rendered).html()
+  return $(rendered).html()
 }
 
 function displayImage (image) {
-  var imgtemp = jQ('.imageCard').clone().html()
+  var imgtemp = $('.imageCard').clone().html()
   return renderAudioVideoImage(imgtemp, image)
 }
 
 function displayAudio (audio) {
-  var audiotemp = jQ('.audioCard').clone().html()
+  var audiotemp = $('.audioCard').clone().html()
   return renderAudioVideoImage(audiotemp, audio)
 }
 
 function displayVideo (video) {
-  var videotemp = jQ('.videoCard').clone().html()
+  var videotemp = $('.videoCard').clone().html()
   return renderAudioVideoImage(videotemp, video)
 }
 
 function displayButtons (buttons) {
-  var btntemp = jQ('.buttonCard').clone().html()
+  var btntemp = $('.buttonCard').clone().html()
   Mustache.parse(btntemp)
   var rendered = Mustache.render(btntemp, {
     button: buttons
@@ -318,7 +399,7 @@ function renderAudioVideoImage (doc, url) {
     attr: 'src',
     attrVal: url
   })
-  return jQ(rendered).html()
+  return $(rendered).html()
 }
 
 function registerFeedback (feedback, status, text, shoutout) {
@@ -367,37 +448,49 @@ function addToFeedback (feedback, stat, mtext) {
 }
 
 var setTimeoutID
-jQ('#minim-chat').click(function () {
-  jQ('#minim-chat').css('display', 'none')
-  jQ('#maxi-chat').css('display', 'block')
-  // var height = (jQ(".chat").outerHeight(true) - 46) * -1;
-  // jQ(".chat").css("margin", "0 0 " + height + "px 0");
-  jQ('.chat').css('margin', '0 0 -344px 0')
+$('#minim-chat').click(function () {
+  $('#minim-chat').css('display', 'none')
+  $('#maxi-chat').css('display', 'block')
+  // var height = ($(".chat").outerHeight(true) - 46) * -1;
+  // $(".chat").css("margin", "0 0 " + height + "px 0");
+  $('.chat').css('margin', '0 0 -344px 0')
   setTimeoutID = setTimeout(function () {
-    jQ('#animHelpText').css('display', 'block')
+    $('#animHelpText').css('display', 'block')
   }, 1500)
 })
-jQ('#maxi-chat').click(function () {
-  jQ('#minim-chat').css('display', 'block')
-  jQ('#maxi-chat').css('display', 'none')
-  jQ('.chat').css('margin', '0')
-  jQ('#animHelpText').css('display', 'none')
+$('#maxi-chat').click(function () {
+  $('#minim-chat').css('display', 'block')
+  $('#maxi-chat').css('display', 'none')
+  $('.chat').css('margin', '0')
+  $('#animHelpText').css('display', 'none')
   clearTimeout(setTimeoutID)
 })
 
-// jQ('#generalForm').submit(function() {
+/**
+ * Called when the Submit button is clicked
+ */
+function submitForm (e) {
+  e.preventDefault()
+  userInputVal = $userInputField.val()
+  insertMessage(userInputVal)
+  if (userInputVal) {
+    GetConversationId()
+  }
+}
+// $('#generalForm').submit(function() {
 //   var msg = $userInputField.val()
 //   disableUserInput('Please Wait...')
 //   insertMessage(msg)
 //   enableUserInput('Please Type!')
 //   return false
 // })
+$('#generalForm').bind('submit', submitForm)
 
-jQ(document).ready(function () {
+$(document).ready(function () {
   // check that your browser supports the API
   if ((window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition) === undefined) {
     console.log('Sorry, your Browser does not support the Speech API')
-    jQ('#userInputVoice').css('display', 'none')
+    $('#userInputVoice').css('display', 'none')
   } else {
     // Create the recognition object and define the event handlers
     var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)()
@@ -437,7 +530,7 @@ jQ(document).ready(function () {
         recognizing = false
       }
     }
-    jQ('#enabledVoiceBtn').click(function (e) {
+    $('#enabledVoiceBtn').click(function (e) {
       if (recognizing) {
         recognition.stop()
         // $('#start_button').html('Click to Start Again');
@@ -472,60 +565,60 @@ function faqs (choices) {
 function disableMainContent () {
   var contents = ['messages', 'faqs', 'helpdesk', 'announcements', 'search']
   contents.forEach(function (element) {
-    jQ('.' + element).css('display', 'none')
+    $('.' + element).css('display', 'none')
     // console.log(element)
   }, this)
 }
 
 function faqBtnClick () {
   disableMainContent()
-  jQ('.faqs').css('display', 'block')
+  $('.faqs').css('display', 'block')
   console.log('enable faqs')
 }
 
 function helpdeskBtnClick () {
   disableMainContent()
-  jQ('.helpdesk').css('display', 'block')
+  $('.helpdesk').css('display', 'block')
   console.log('enable helpdesk')
 }
 
 function searchBtnClick () {
   disableMainContent()
-  jQ('.search').css('display', 'block')
+  $('.search').css('display', 'block')
   console.log('enable search')
 }
 
 function announcementBtnClick () {
   disableMainContent()
-  jQ('.announcements').css('display', 'block')
+  $('.announcements').css('display', 'block')
   console.log('enable announcement')
 }
 
 function backToChatBtnClick () {
   disableMainContent()
-  jQ('.messages').css('display', 'block')
+  $('.messages').css('display', 'block')
   console.log('enable messages')
 }
 
-jQ('.top-menu-bar button').click(function () {
+$('.top-menu-bar button').click(function () {
   // make all top menu button disabled
-  jQ('.top-menu-bar button').each(function () {
-    if (jQ(this).hasClass('top-menu-bar-selected')) {
+  $('.top-menu-bar button').each(function () {
+    if ($(this).hasClass('top-menu-bar-selected')) {
       console.log('disable all button')
-      jQ(this).removeClass('top-menu-bar-selected')
+      $(this).removeClass('top-menu-bar-selected')
     }
   })
   // only make the selected button as selected
-  jQ(this).addClass('top-menu-bar-selected')
+  $(this).addClass('top-menu-bar-selected')
   console.log('enable current button')
 })
 
-jQ('button.backToChatBtn').click(function () {
+$('button.backToChatBtn').click(function () {
   // make all top menu button disabled
-  jQ('.top-menu-bar button').each(function () {
-    if (jQ(this).hasClass('top-menu-bar-selected')) {
+  $('.top-menu-bar button').each(function () {
+    if ($(this).hasClass('top-menu-bar-selected')) {
       console.log('disable all button')
-      jQ(this).removeClass('top-menu-bar-selected')
+      $(this).removeClass('top-menu-bar-selected')
     }
   })
 })
@@ -551,4 +644,4 @@ setTimeout(function () {
   enableUserInput('Please ask your query')
 }, 2000)
 
-jQ('#chat-search').easyAutocomplete(options)
+$('#chat-search').easyAutocomplete(options)
