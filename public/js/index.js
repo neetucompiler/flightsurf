@@ -29,7 +29,7 @@ function GetConversationId () {
     console.log(response)
     console.log(response.data)
     convoId = response['conversationId']
-    $('<div class="message loading new"><figure class="avatar"><img src="icon.png" /></figure><span></span></div>').appendTo($('.mCSB_container'))
+    $('<div class="message loading new"><figure class="avatar"><img src="images/icon.png" /></figure><span></span></div>').appendTo($('.mCSB_container'))
     setTyping()
     updateScrollbar()
     setTimeout(function () {
