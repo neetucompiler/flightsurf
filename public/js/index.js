@@ -22,12 +22,9 @@ function GetConversationId () {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + BOT_CONNECTOR
     },
-    url: 'https://directline.botframework.com/api/conversations'
+    // DIRECT LINE API 1.1 url: 'https://directline.botframework.com/api/conversations'
+    url: 'https://directline.botframework.com/v3/directline/conversations'
   }).then(function (response) {
-    console.log(response)
-    console.log('success')
-    console.log(response)
-    console.log(response.data)
     convoId = response['conversationId']
     $('<div class="message loading new"><figure class="avatar"><img src="images/icon.png" /></figure><span></span></div>').appendTo($('.mCSB_container'))
     setTyping()
@@ -42,16 +39,17 @@ function GetConversationId () {
  * For accessing LUIS API conversation
  */
 function PostMessage () {
-  console.log('https://directline.botframework.com/api/conversations/' + convoId + '/messages')
-  console.log(userInputVal)
-
   var dataToBePassed = {
+    'type': 'message',
     'text': userInputVal,
-    'from': 'user1'
+    'from': {
+      'id': 'user1'
+    }
+
   }
 
   $.ajax({
-    url: 'https://directline.botframework.com/api/conversations/' + convoId + '/messages',
+    url: 'https://directline.botframework.com/v3/directline/conversations/' + convoId + '/activities',
     dataType: 'json',
     type: 'post',
     contentType: 'application/json',
@@ -72,16 +70,15 @@ function PostMessage () {
  */
 function GetMessage () {
   $.ajax({
-    url: 'https://directline.botframework.com/api/conversations/' + convoId + '/messages',
+    url: 'https://directline.botframework.com/v3/directline/conversations/' + convoId + '/activities',
     type: 'get',
     contentType: 'application/json',
     headers: {
       'Authorization': 'Bearer ' + BOT_CONNECTOR
     },
     success: function (response) {
-      console.log(response['messages'][response['watermark']]['text'])
       var botJsonMsg = {
-        'message': response['messages'][response['watermark']]['text'],
+        'message': response['activities'][response['watermark']]['text'],
         'type': 'normal'
       }
       botMessage(botJsonMsg)
