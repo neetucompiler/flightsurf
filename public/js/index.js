@@ -115,6 +115,7 @@ function enableUserInput (placeholderText) {
 
 $(window).on('load', function () {
   $messages.mCustomScrollbar()
+  welcomeMessage()
 })
 
 $('.end-chat').click(function () {
@@ -539,7 +540,6 @@ $(document).ready(function () {
         $userInputField.html('&nbsp;')
       }
     })
-    welcomeMessage()
   }
 })
 
