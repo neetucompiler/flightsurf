@@ -539,6 +539,7 @@ $(document).ready(function () {
         $userInputField.html('&nbsp;')
       }
     })
+    welcomeMessage()
   }
 })
 
@@ -633,12 +634,12 @@ var options = {
 }
 
 // Sample for sending bot message
-setTimeout(function () {
+function welcomeMessage () {
   botMessage({
     message: 'Hi there, I\'m Thai Bot and I am here to assist you. I can help you with regional and intercontinental performance report',
     type: 'normal'
   })
   enableUserInput('Please ask your query')
-}, 500)
+}
 
 $('#chat-search').easyAutocomplete(options)
