@@ -20,16 +20,16 @@ function setTimeStamp(customTimeStamp) {
   jQ('<div class="timestamp">' + customTimeStamp + '</div>').appendTo(jQ('.message:last'))
 }
 
-function setTyping() {
-  var correctElement = msgsContainer.find('.mCSB_container')
-  if (!correctElement.length) {
-    console.log('No element found with .mCSB_container')
-    return false
-  }
-  jQ('<div class="message loading new"><figure class="avatar"><img src="/public/images/icon.png" /></figure><span></span></div>').appendTo(correctElement)
-  jQ('<div class="timestamp">Typing...</div>').appendTo(jQ('.message:last'))
-  updateScrollbar()
-}
+// function setTyping() {
+//   var correctElement = msgsContainer.find('.mCSB_container')
+//   if (!correctElement.length) {
+//     console.log('No element found with .mCSB_container')
+//     return false
+//   }
+//   jQ('<div class="message loading new"><figure class="avatar"><img src="/public/images/icon.png" /></figure><span></span></div>').appendTo(correctElement)
+//   jQ('<div class="timestamp">Typing...</div>').appendTo(jQ('.message:last'))
+//   updateScrollbar()
+// }
 
 function disableUserInput(placeholderText) {
   placeholderText = placeholderText || 'Please Wait...' // Default text

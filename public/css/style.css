@@ -443,7 +443,7 @@ Message Box
   height: 20px;
   margin: 0;
   padding-right: 20px;
-  width: 265px;
+  width: 200px;
 }
 
 .message-box textarea:focus:-webkit-placeholder {

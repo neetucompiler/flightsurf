@@ -77,6 +77,7 @@ function GetMessage () {
       'Authorization': 'Bearer ' + BOT_CONNECTOR
     },
     success: function (response) {
+      console.log('response received from LUIS:' + response['activities'][response['watermark']]['text'])
       var botJsonMsg = {
         'message': response['activities'][response['watermark']]['text'],
         'type': 'normal'
@@ -193,7 +194,7 @@ function speak (text) {
  */
 function botMessage (botMsg) {
   $('.message.loading').remove()
-  $('.message.timestamp').remove()
+  $('.message .timestamp:last').remove()
   var temp = ''
   var rendered
   // if (botMsg.type === 'feedback') {
