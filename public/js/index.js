@@ -27,7 +27,7 @@ function GetConversationId () {
     updateScrollbar()
     setTimeout(function () {
       PostMessage()
-    }, 1000)
+    }, 2000)
   })
 }
 
@@ -56,7 +56,7 @@ function PostMessage () {
     success: function (data, status) {
       setTimeout(function () {
         GetMessage()
-      }, 3000)
+      }, 2000)
     }
   })
 }
@@ -73,12 +73,13 @@ function GetMessage () {
       'Authorization': 'Bearer ' + BOT_CONNECTOR
     },
     success: function (response) {
+      var luisResponse = response['activities'][response['watermark']]['text']
       console.log('Bot Response from LUIS :' + response['activities'][response['watermark']]['text'])
       var botJsonMsg = {
-        'message': response['activities'][response['watermark']]['text'],
+        'message': luisResponse,
         'type': 'normal'
       }
-      botMessage(botJsonMsg)
+      if (luisResponse.length > 0) { botMessage(botJsonMsg) }
     }
   })
 }
