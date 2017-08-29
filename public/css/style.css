@@ -1383,3 +1383,10 @@ span.chat-search {
   margin: 0;
   padding: 5px;
 }
+​.container {
+	overflow: hidden;
+}
+
+#templates {
+	display: none;
+}

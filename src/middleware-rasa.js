@@ -1,20 +1,4 @@
 const request = require('request-promise')
-const winston = require('winston')
-require('winston-azure-blob-transport')
-
-var logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.AzureBlob)({
-      account: {
-        name: 'bottest',
-        key: 'x3UGY+Yk0pluV32GH6FwWwY3Ys7Jphc2o+0z392HeXBgcEWDv/Bp/OnnITr5BQ54IlJbV6eVjZt+qpwHbzzUng=='
-      },
-      containerName: 'intent-data',
-      blobName: 'somefile.log',
-      level: 'info'
-    })
-  ]
-})
 
 // winston.add(winston.transports.File, { filename: 'somefile.log' })
 module.exports = config => {
@@ -44,8 +28,6 @@ module.exports = config => {
       }
       request(options)
         .then(response => {
-          logger.info(message.text)
-          winston.info(message.text)
           message.intent = response.intent
           message.entities = response.entities
           message.confidence = response.intent.confidence
